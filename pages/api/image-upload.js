@@ -18,8 +18,9 @@ export const config = {
   };
 
   export default async function handler(req, res) {
-    // Upload image to Supabase
+        // Upload image to Supabase
 // Upload image to Supabase
+
     if (req.method === 'POST') {
       let { image } = req.body;
 
@@ -38,8 +39,11 @@ export const config = {
         // Upload image
         const fileName = nanoid();
         const ext = contentType.split('/')[1];
-        const path = `${fileName}.${ext}`;
+        const path = `supavacation/${fileName}.${ext}`;
 
+        console.log("Uplaod image filename, ext & path", fileName, ext, path)
+
+        // Error Isolation
         const { data, error: uploadError } = await supabase.storage
           .from(process.env.SUPABASE_BUCKET)
           .upload(path, decode(base64FileData), {
@@ -47,16 +51,26 @@ export const config = {
             upsert: true,
           });
 
+          console.log("Superbase storage:",data)
+
+          // Error Isolation
+          // The Image file name in storage is not the same has what 
+          // is found in the path name in SQL table
+
         if (uploadError) {
-          console.log(uploadError);
           throw new Error('Unable to upload image to storage');
         }
 
         // Construct public URL
         const url = `${process.env.SUPABASE_URL.replace(
-          '.co',
-          '.in'
-        )}/storage/v1/object/public/${data.Key}`;
+          '.in',
+          '.co'
+        )}/storage/v1/object/public/${data.path}`;
+
+        console.log('Test 4:',url)
+        console.log(data.path)
+        console.log(data.Key )
+        // https://ovyqcwcpqxyuunpbufrg.supabase.co/storage/v1/object/public/supa/amsterdam.jpeg?t=2023-05-08T19%3A04%3A56.135Z
 
         return res.status(200).json({ url });
       } catch (e) {

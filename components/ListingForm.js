@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import { Formik, Form } from 'formik';
 import Input from '@/components/Input';
 import ImageUpload from '@/components/ImageUpload';
+import axios from 'axios';
 
 const ListingSchema = Yup.object().shape({
   title: Yup.string().trim().required(),
@@ -29,18 +30,22 @@ const ListingForm = ({
 
   const upload = async image => {
     if (!image) return;
-
+    // console.log("Test 1: Image", image)
     let toastId;
     try {
       setDisabled(true);
+      // console.log("Test 2: setDisabled true?", disabled)
       toastId = toast.loading('Uploading...');
       const { data } = await axios.post('/api/image-upload', { image });
       setImageUrl(data?.url);
+      console.log("Test 3 imageUrl", data.url)
       toast.success('Successfully uploaded', { id: toastId });
     } catch (e) {
+      // console.log("Test 4: Catch")
       toast.error('Unable to upload', { id: toastId });
       setImageUrl('');
     } finally {
+      // console.log("Test 5: Finally", data)
       setDisabled(false);
     }
   };
@@ -55,7 +60,6 @@ const ListingForm = ({
         await onSubmit({ ...values, image: imageUrl });
       }
       toast.success('Successfully submitted', { id: toastId });
-      // Redirect user
       if (redirectPath) {
         router.push(redirectPath);
       }

@@ -1,13 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from 'lib/prisma'
 
-const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
       try {
         const { image, title, description, price, guests, beds, baths } =
           req.body;
-  
+        // Imaage Variable in Homes Api
+        console.log("Image Variable In Home Api",image)
         const home = await prisma.home.create({
           data: {
             image,
