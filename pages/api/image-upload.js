@@ -41,21 +41,12 @@ export const config = {
         const ext = contentType.split('/')[1];
         const path = `supavacation/${fileName}.${ext}`;
 
-        console.log("Uplaod image filename, ext & path", fileName, ext, path)
-
-        // Error Isolation
         const { data, error: uploadError } = await supabase.storage
           .from(process.env.SUPABASE_BUCKET)
           .upload(path, decode(base64FileData), {
             contentType,
             upsert: true,
           });
-
-          console.log("Superbase storage:",data)
-
-          // Error Isolation
-          // The Image file name in storage is not the same has what 
-          // is found in the path name in SQL table
 
         if (uploadError) {
           throw new Error('Unable to upload image to storage');
@@ -65,7 +56,7 @@ export const config = {
         const url = `${process.env.SUPABASE_URL.replace(
           '.in',
           '.co'
-        )}/storage/v1/object/public/${data.path}`;
+        )}/storage/v1/object/public/supavacation-storage/${data.path}`;
 
         console.log('Test 4:',url)
         console.log(data.path)
