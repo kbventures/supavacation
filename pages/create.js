@@ -21,7 +21,7 @@ const Create = () => {
           />
         </div>
       </div>
-    </Layout>
+     </Layout>
   );
 };
 

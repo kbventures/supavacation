@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
@@ -27,6 +27,25 @@ const ListingForm = ({
 
   const [disabled, setDisabled] = useState(false);
   const [imageUrl, setImageUrl] = useState(initialValues?.image ?? '');
+
+  const [initialFormValues, setInitialFormValues] = useState({
+    image: '',
+    title: '',
+    description: '',
+    price: 0,
+    guests: 1,
+    beds: 1,
+    baths: 1,
+  });
+
+  useEffect(() => {
+    if (initialValues) {
+      const { image, ...values } = initialValues;
+      setInitialFormValues(values);
+    }
+  }, [initialValues]);
+
+
 
   const upload = async image => {
     if (!image) return;
@@ -64,21 +83,25 @@ const ListingForm = ({
     }
   };
 
-  const { image, ...initialFormValues } = initialValues ?? {
-    image: '',
-    title: '',
-    description: '',
-    price: 0,
-    guests: 1,
-    beds: 1,
-    baths: 1,
-  };
+  // let { image, ...initialFormValues } = initialValues ?? {
+  //   image: '',
+  //   title: '',
+  //   description: '',
+  //   price: 0,
+  //   guests: 1,
+  //   beds: 1,
+  //   baths: 1,
+  // };
+
+  // console.log("testing",initialValues)
+  // console.log('testing1', initialFormValues)
+  // console.log('testing2',typeof image,image.length)
 
   return (
     <div>
       <div className="mb-8 max-w-md">
         <ImageUpload
-          initialImage={{ src: image, alt: initialFormValues.title }}
+          initialImage={{ src: initialFormValues.image, alt: initialFormValues.title }}
           onChangePicture={upload}
         />
       </div>

@@ -58,11 +58,6 @@ export const config = {
           '.co'
         )}/storage/v1/object/public/supavacation-storage/${data.path}`;
 
-        console.log('Test 4:',url)
-        console.log(data.path)
-        console.log(data.Key )
-        // https://ovyqcwcpqxyuunpbufrg.supabase.co/storage/v1/object/public/supa/amsterdam.jpeg?t=2023-05-08T19%3A04%3A56.135Z
-
         return res.status(200).json({ url });
       } catch (e) {
         res.status(500).json({ message: 'Something went wrong' });
