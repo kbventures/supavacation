@@ -6,6 +6,8 @@ import prisma from 'lib/prisma'
 import Handlebars from 'handlebars';
 import { readFileSync } from 'fs';
 import path from 'path';
+import GoogleProvider from 'next-auth/providers/google';
+
 
 
 const transporter = nodemailer.createTransport({
@@ -73,9 +75,13 @@ export default NextAuth({
       maxAge: 10 * 60,
       sendVerificationRequest,
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
   ],
   adapter: PrismaAdapter(prisma),
-  events: { createUser: sendWelcomeEmail }
+  events: { createUser: sendWelcomeEmail },
 });
 
 
